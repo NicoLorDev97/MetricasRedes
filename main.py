@@ -1,9 +1,7 @@
 import gspread
 import pandas as pd
-import pymysql
 from google_auth_oauthlib.flow import InstalledAppFlow
-import numpy as np
-import datetime
+import desglose
 
 ## Aca conectamos , mediante terminal, los csv a una base de datos, en este caso, un spreedsheet
 flow = InstalledAppFlow.from_client_secrets_file(
@@ -18,8 +16,20 @@ flow = InstalledAppFlow.from_client_secrets_file(
 creds = flow.run_local_server(port=0)
 client = gspread.authorize(creds)
 
-
-#######
 sheet = client.open_by_key("17Ge3iD3xswqericZ135yf33Jt8fqOg-55GZMw4IuQtk").worksheet("Datos")
 data = sheet.get_all_values()
-print(data)
+
+spreadsheet_key = "17Ge3iD3xswqericZ135yf33Jt8fqOg-55GZMw4IuQtk"
+worksheet_name = "Datos"
+spreadsheet = client.open_by_key(spreadsheet_key)
+worksheet = spreadsheet.worksheet(worksheet_name)
+
+existing_headers = worksheet.row_values(1)
+
+df_resumen = pd.DataFrame(desglose.df_resumen)
+
+if set(existing_headers) == set(df_resumen.columns):
+    worksheet.append_rows(df_resumen.values.tolist(), value_input_option="RAW")
+    print("DataFrame agregado correctamente.")
+else:
+    print("Los encabezados del DataFrame no coinciden con los de la hoja de cálculo.")
