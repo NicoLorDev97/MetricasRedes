@@ -68,8 +68,14 @@ print(f"Dando un total de: {invitaciones_totales}  invitaciones")
 print(f"Invitaciones enviadas con mensaje: {mensajes_enviados}")
 print(f"Invitaciones recibidas con mensaje: {mensajes_recibidos}")
 
-# Preprocesamiento de columnas de fecha
+# Preprocesamiento de columnas
 
+connections_subset = connections[['First Name', 'First Name', 'URL','Connected On']]  # Reemplaza 'Columna3', 'Columna4', ... con los nombres de las columnas que necesitas
+invitations_subset = invitations[['From', 'Sent At', 'Message']]  # Reemplaza 'Columna5', 'Columna6', ... con los nombres de las columnas que necesitas
+messages_subset = messages[['CONVERSATION ID', 'FROM','TO','DATE']]  # Reemplaza 'Columna7', 'Columna8', ... con los nombres de las columnas que necesitas
+
+
+# Preprocesamiento de columnas de fecha
 
 company_follows["Followed On"] = pd.to_datetime(company_follows["Followed On"]).dt.strftime("%Y%m")
 connections["Connected On"] = pd.to_datetime(connections["Connected On"]).dt.strftime("%Y%m")
@@ -84,12 +90,8 @@ invitations.rename(columns={"Sent At": "month_year"}, inplace=True)
 messages.rename(columns={"DATE": "month_year"}, inplace=True)
 
 # Combina los DataFrames
-df = merge(company_follows, connections, on="month_year")
-df = merge(df, invitations, on="month_year")
-df = merge(df, messages, on="month_year")
 
 
-print(df)
 # # ### PRIMERO LEEMOS EL CSV DE CONNECTIONS 
 # # #Cantidad total de contactos
 # # contactos = len(df)
