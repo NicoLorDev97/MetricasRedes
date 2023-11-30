@@ -98,3 +98,21 @@ messages.rename(columns={"DATE": "month_year"}, inplace=True)
 # # # Agregados por dia
 # # conteo_por_fecha = df.groupby('Connected On')['First Name'].count()
 # # print(conteo_por_fecha)
+
+data = {
+    "User": "More",
+    "Contactos": [contactos],
+    "Cantidad empresas seguidas": [cant_empresas],
+    "Invitaciones enviadas": [invitaciones_enviadas],
+    "Invitaciones recibidas": [invitaciones_recibidas],
+    "Mensajes en invitaciones enviadas": [mensajes_enviados],
+    "Mensajes en invitaciones recibidas": [mensajes_recibidos],
+    "Invitaciones totales": [invitaciones_totales]
+}
+
+# Convertir el diccionario a DataFrame
+df_resumen = pd.DataFrame(data)
+
+# Muestra el DataFrame
+
+print(df_resumen)
