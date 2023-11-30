@@ -6,10 +6,24 @@ import os
 
 def ObtenerUsers(directorio):
     directorio_data = directorio
-    archivos = os.listdir(directorio_data)
-    users = archivos
-    return users
 
+    archivos = os.listdir(directorio_data)
+    archivos_usuarios = [archivo for archivo in archivos if archivo.endswith('.csv')]
+    users = []
+
+    for usuario in archivos_usuarios:
+        ruta_usuario = os.path.join(directorio_data, usuario)
+        user = usuario.split("_")[0]
+        if not user in users:
+            users.append(user)
+        try:
+            with open(ruta_usuario, 'r', encoding='utf-8') as archivo:
+                contenido = archivo.read()
+            print(f"Procesando usuario: {usuario}")
+        
+        except UnicodeDecodeError as e:
+            print(f"Error al decodificar el archivo {usuario}: {e}")
+            
 def Conexion(spreadsheet_key,worksheet_name):
 ## Aca conectamos , mediante terminal, los csv a una base de datos, en este caso, un spreedsheet
     flow = InstalledAppFlow.from_client_secrets_file(
