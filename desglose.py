@@ -51,3 +51,27 @@ print(f"Invitaciones enviadas con mensaje: {mensajes_enviados}")
 print(f"Invitaciones recibidas con mensaje: {mensajes_recibidos}")
 
 print(f"Contactos agregados por fecha: {conteo_por_fecha}")
+
+# Tu código original para calcular las métricas
+# Asegúrate de ejecutar esto primero
+
+# Creación del DataFrame con las métricas
+data = {
+    "User": "More",
+    "Contactos": [contactos],
+    "Cantidad empresas seguidas": [cant_empresas],
+    "Invitaciones enviadas": [invitaciones_enviadas],
+    "Invitaciones recibidas": [invitaciones_recibidas],
+    "Mensajes en invitaciones enviadas": [mensajes_enviados],
+    "Mensajes en invitaciones recibidas": [mensajes_recibidos],
+    "Invitaciones totales": [invitaciones_totales]
+}
+
+# Convertir el diccionario a DataFrame
+df_resumen = pd.DataFrame(data)
+
+# Muestra el DataFrame
+
+print(df_resumen)
+
+print(f"Contactos agregados por fecha: {conteo_por_fecha}")
