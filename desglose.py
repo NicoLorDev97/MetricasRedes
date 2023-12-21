@@ -31,6 +31,9 @@ publications = leer_archivo(f"users/{nombre_user}/contenido_mes.xlsx", sheet_nam
 
 print (nombre_user)
 
+
+##Ahroa tenemos shares entonces esto cambia, hay que separar los compartidos de las publicaciones creadas
+
 # Unificar las dos columnas 'Fecha de publicación' en una sola
 # Buscar columnas vacías sin título
 empty_columns = publications.columns[publications.isnull().all()]
@@ -59,12 +62,12 @@ publications.drop(['Fecha de publicación 1', 'Fecha de publicación 2'], axis=1
 #Preprocesamiento de columnas de fecha
 print(publications.columns)
 
-company_follows["Followed On"] = pd.to_datetime(company_follows["Followed On"]).dt.strftime("%Y%m")
-connections["Connected On"] = pd.to_datetime(connections["Connected On"]).dt.strftime("%Y%m")
-invitations["Sent At"] = pd.to_datetime(invitations["Sent At"]).dt.strftime("%Y%m")
-messages["DATE"] = pd.to_datetime(messages["DATE"]).dt.strftime("%Y%m")
+company_follows["Followed On"] = pd.to_datetime(company_follows["Followed On"]).dt.strftime("%m-%Y")
+connections["Connected On"] = pd.to_datetime(connections["Connected On"]).dt.strftime("%m-%Y")
+invitations["Sent At"] = pd.to_datetime(invitations["Sent At"]).dt.strftime("%m-%Y")
+messages["DATE"] = pd.to_datetime(messages["DATE"]).dt.strftime("%m-%Y")
 publications['Fecha de publicación'] = pd.to_datetime(publications['Fecha de publicación'])
-publications['Fecha de publicación'] = publications['Fecha de publicación'].dt.strftime('%Y%m')
+publications['Fecha de publicación'] = publications['Fecha de publicación'].dt.strftime("%m-%Y")
 # Renombra las columnas de fecha para uniformidad
 company_follows.rename(columns={"Followed On": "month_year"}, inplace=True)
 connections.rename(columns={"Connected On": "month_year"}, inplace=True)
@@ -75,14 +78,10 @@ publications.rename(columns={"Fecha de publicación": "month_year"}, inplace=Tru
 # Preprocesamiento de la columna 'Fecha de publicación' para asegurar que esté en formato datetime
 # publications['month_year'] = pd.to_datetime(publications['month_year'], dayfirst=True)
 
-st.write(publications['month_year'].dtype)
-
 # Hacer el conteo por fecha
 conteo_publicaciones_por_fecha = publications.groupby('month_year').size().reset_index(name='Cantidad de Publicaciones')
 
-st.title("conteo de publicaciones por fecha")
 
-st.write(conteo_publicaciones_por_fecha)
 
 ### PRIMERO LEEMOS EL CSV DE CONNECTIONS 
 #Cantidad total de contactos
@@ -196,8 +195,6 @@ for month_year, values in conteo_invitaciones.items():
 #
 
 # Combina los DataFrames
-print(company_follows)
-
 
 # df_vs
 # iteras cada uno de los df que tenes y vas cargando un registro por cada uno con el formato que necesitas para la base.
@@ -213,49 +210,3 @@ for i in range(len(conteo_publicaciones_por_fecha)):
     df_final.loc[len(df_final)] = data
 
 st.write(df_final)
-# data = {
-#     "User": {'dato': "More"},
-#     "Contactos": {'cantidad':[contactos], 'fecha':[contactos]},
-#     "Publicaciones": {'cantidad':[conteo_publicaciones_por_fecha], 'fecha':[]},
-#     "Empresas seguidas": {'cantidad':[cant_empresas], 'fecha':[]},  
-#     "Invitaciones": {'recibidas':{'cantidad':[invitaciones_recibidas], "mensajes":[mensajes_recibidos], 'fecha':[]},
-#                     'enviadas': {'enviadas':[invitaciones_enviadas], "mensajes":[mensajes_enviados],'fecha':[]},
-#                     "totales": {"cantidad":[invitaciones_totales],'fecha':[]}},
-#     "Mensajes":{'recibidas':{'cantidad':[invitaciones_recibidas],'fecha':[]},
-#                     'enviadas': {'enviadas':[invitaciones_enviadas],'fecha':[]}}
-# }
-
-# # Convertir el diccionario a DataFrame
-# df_resumen = pd.DataFrame(data)
-
-# # Muestra el DataFrame
-
-# connections_dict = connections.groupby('month_year').apply(lambda x: x.to_dict(orient='records')).to_dict()
-# company_follows_dict = company_follows.groupby('month_year').apply(lambda x: x.to_dict(orient='records')).to_dict()
-# invitations_dict = invitations.groupby('month_year').apply(lambda x: x.to_dict(orient='records')).to_dict()
-# messages_dict = messages.groupby('month_year').apply(lambda x: x.to_dict(orient='records')).to_dict()
-# fecha_especifica = '202311'  # Cambia esto por la fecha que desees buscar
-# datos_connections = connections_dict.get(fecha_especifica, [])
-
-# df_resumen = pd.DataFrame(data)
-
-# st.title("Resumen de datos")
-# st.write("Datos recopilados:")
-
-# # Mostrar el DataFrame generado a partir del diccionario data
-# st.write(df_resumen)
-
-# st.title("Conteo de conexiones por mes y año")
-# st.write("Datos de conexiones por mes y año:")
-
-# # Mostrar el DataFrame generado a partir del conteo de conexiones por día
-# st.write(conteo_por_fecha)
-
-
-# # Gráfico de barras para invitaciones enviadas y recibidas
-# fig, ax = plt.subplots()
-# ax.bar(['Enviadas', 'Recibidas'], [invitaciones_enviadas, invitaciones_recibidas])
-# ax.set_title('Cantidad de invitaciones')
-# ax.set_ylabel('Cantidad')
-# st.pyplot(fig)
-
