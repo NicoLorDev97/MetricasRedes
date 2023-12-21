@@ -6,6 +6,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 import os
 import desglose as dg
 
+spreadsheet_key = "17Ge3iD3xswqericZ135yf33Jt8fqOg-55GZMw4IuQtk" #Aca definimos la ID de la base de datos, que sera siempre la misma ya que es la base.
+
 def ObtenerUsers(directorio):
     directorio_data = directorio
     archivos = os.listdir(directorio_data)
@@ -25,14 +27,10 @@ def Conexion(spreadsheet_key,worksheet_name):
     )
     creds = flow.run_local_server(port=0)
     client = gspread.authorize(creds)
-
-    id_sheets = "17Ge3iD3xswqericZ135yf33Jt8fqOg-55GZMw4IuQtk"
-    hoja_interacciones =  "Interacciones"
-    sheet = client.open_by_key(id_sheets).worksheet(hoja_interacciones)
-    data = sheet.get_all_values()
     spreadsheet = client.open_by_key(spreadsheet_key)
     worksheet = spreadsheet.worksheet(worksheet_name)
-    return worksheet
+    data = worksheet.get_all_values()
+    return data
 
 def Carga(worksheet):
     existing_headers = worksheet.row_values(1)
@@ -43,9 +41,17 @@ def Carga(worksheet):
     else:
         print("Los encabezados del DataFrame no coinciden con los de la hoja de cálculo.")
 
+def ObtenerInicio(user):
+    worksheet_name = "User"
+    data = Conexion(spreadsheet_key,worksheet_name)
+    for item in data:
+        if user == item[1]:
+            inicio = item[3]
+            return inicio
 
 ####################################################################
-spreadsheet_key = "17Ge3iD3xswqericZ135yf33Jt8fqOg-55GZMw4IuQtk"
-worksheet_name = "Interacciones"
-worksheet = Conexion(spreadsheet_key,worksheet_name)
-Carga(worksheet)
+#Este vendria a ser el input, que hoja de la base de datos queres traer 
+worksheet_name = "User"
+#
+inicio = ObtenerInicio("Nicolas")
+print(inicio)
