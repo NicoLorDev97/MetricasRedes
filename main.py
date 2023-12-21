@@ -42,8 +42,6 @@ def Carga(worksheet):
     else:
         print("Los encabezados del DataFrame no coinciden con los de la hoja de cálculo.")
 
-#def ObtenerData(spreadsheet_key,worksheet_name):
-
 def ObtenerInicio(user):
     worksheet_name = "User"
     data = Conexion(spreadsheet_key,worksheet_name)
